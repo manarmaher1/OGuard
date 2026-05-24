@@ -4,7 +4,7 @@
 
 
 [ Built as a first-round assignment for Olympix.
-Exploit: Hacken $HAI Bridge Key Compromiseو June / 2025. ] 
+Exploit: Hacken $HAI Bridge Key Compromise, June / 2025. ] 
 
 
 ## The Problem
