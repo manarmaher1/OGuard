@@ -10,12 +10,11 @@ Exploit: Hacken $HAI Bridge Key Compromise, June / 2025. ]
 ## The Problem
 
 The Hacken hack had no code bug. The contract was written correctly 
-and would have passed every audit. The vulnerability was operational 
-— a forgotten private key on a decommissioned server with unrestricted 
+and would have passed every audit and the vulnerability was operational 
+, a forgotten private key on a decommissioned server with unrestricted 
 minting power and nothing to stop it.
 
-No pre-deployment tool catches this. No monitoring tool stops it 
-before it happens. OGuard does.
+Pre-deployment tools can't catch operational infrastructure failures. Traditional monitoring tools can only alert you after the state transition has already occurred. OGuard enforces economic invariants inline, stopping the exploit mid-execution.
 
 ---
 
@@ -33,7 +32,7 @@ Zero tokens minted. Zero damage.
 ---
 
 ## How It Prevents the Hacken Hack
-Pool depth at time of hack:  ~20,000,000 HAI
+Pool depth at time of hack:  ~20,000,000 HAI (Estimated from Onchain data)
 OGuard ceiling at 5%:          1,000,000 HAI per 24 hours
 Attacker requested:          900,000,000 HAI
 900,000,000 > 1,000,000 → REVERT → $0 stolen
@@ -47,7 +46,6 @@ OGuard.sol                # The execution firewall
 test/
 Mocks.sol                 # Simulates DEX pool liquidity
 OGuard.t.sol              # Five proof-of-concept tests
-PreDeploymentCheck.t.sol  # Pre-deployment pattern detector
 ARCHITECTURE.md             # Full technical design document
 README.md                   # This file
 
@@ -70,16 +68,16 @@ Expected output:
 
 ---
 
-## Known Limitations
+## Notes ( Known Limitations for this demo )
 
 **Flash loan manipulation**  
 OGuard reads spot pool liquidity. Production fix: TWAP oracle.  
-This is a known, solved engineering problem — spot price is used 
-here to demonstrate the core mechanism clearly.
+This is a known, solved engineering problem, spot price is just used 
+here for the purpose of demonstrating the core mechanism clearly.
 
 **Residual risk within ceiling**  
 A compromised key minting within the daily ceiling will pass Rule 3.  
-Every mint emits a visible on-chain event — monitoring catches 
+- Every mint emits a visible on-chain event, monitoring catches 
 anomalous recipients on day one. Emergency freeze closes the window.
 
 **Manual freeze dependency**  
@@ -89,6 +87,7 @@ provider APIs that calls freezeKey() on server decommission events.
 ---
 
 ## Full Architecture
+chech  (ARCHITECTURE.md )
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for complete technical 
 design including component breakdown, adoption model, and future work.
