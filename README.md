@@ -87,7 +87,6 @@ provider APIs that calls freezeKey() on server decommission events.
 ---
 
 ## Full Architecture
-chech  (ARCHITECTURE.md )
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for complete technical 
+check [ARCHITECTURE.md](./ARCHITECTURE.md) for complete technical 
 design including component breakdown, adoption model, and future work.
