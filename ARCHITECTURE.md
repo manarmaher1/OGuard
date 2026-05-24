@@ -55,8 +55,11 @@ The key's activity lifecycle is evaluated.
 * **Epoch Resolution:** The system normalizes time into fixed Unix calendar days (`block.timestamp / 1 days`) to mitigate continuous rolling window tracking gas overhead.
 * **Liquidity Query:** The firewall calls `getReserves()` on the paired automated market maker (AMM) pool, programmatically mapping the correct reserve slot matching the asset.
 * **Ceiling Computation:** The dynamic volume ceiling is calculated based on configured Basis Points (BPS) against live pool depth:
+  ``` 
   $$\text{Dynamic Ceiling} = \frac{\text{Current Pool Liquidity} \times \text{maxPoolImpactBps}}{\text{BPS\_DENOMINATOR}}$$
   *Real Hacken numbers:* $\frac{20,000,000 \times 500}{10,000} = 1,000,000 \text{ HAI per epoch day}$
+  ```
+  
 * **Invariant Enforcement:** The cumulative volume already minted in the current epoch day plus the incoming transaction `amount` is checked against the computed ceiling.
   * If $\text{Global Minted Volume} + \text{Amount} > \text{Dynamic Ceiling}$, execution reverts with `DynamicLiquidityCeilingBreached()`.
 
