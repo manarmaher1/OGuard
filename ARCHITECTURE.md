@@ -68,7 +68,7 @@ If all sequential validation checks pass, the daily epoch cumulative volume is u
 
 ---
 
-## Operational Security Considerations & Vulnerability Surface
+## Operational Security Considerations & Design Decisions
 
 While `OGuard` introduces native defensive resilience against compromised keys, a production-grade deployment must account for the following vector trade-offs identified during architectural evaluation:
 
