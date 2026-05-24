@@ -96,22 +96,8 @@ decentralized price feed (e.g., Chainlink) to smooth out flash
 variations. This is a known, solved engineering problem — spot price 
 is used here to demonstrate the core mechanism clearly.
 
-### 2. Boundary Block Minting (The Calendar Epoch Boundary)
-* **Threat:** Utilizing fixed daily calendar epochs 
-(`block.timestamp / 1 days`) reduces timestamp drift compared to a 
-rolling window approach, but preserves a classic boundary condition: 
-an adversary holding a compromised key can attempt to execute a 
-maximum ceiling mint at hour `23:59` of the current epoch, wait for 
-the transaction block that crosses the midnight UTC threshold, and 
-immediately request another maximum mint at hour `00:01` inside the 
-brand new epoch mapping.
-* **Production Mitigation:** While this is strictly capped at a hard 
-2x maximum pool impact within a short timeframe, true continuous 
-smoothing would require shifting from static calendar epochs to a 
-streaming linear decay accumulator or a continuous sliding window 
-array.
 
-### 3. EVM Storage & Gas Optimization
+### 2. EVM Storage & Gas Optimization
 * **Optimization:** Core authorization parameters are stored inside 
 an individual packed struct (`KeyStatus`), keeping storage reads 
 constrained to a cheap `SLOAD` execution pattern. Human-readable 
