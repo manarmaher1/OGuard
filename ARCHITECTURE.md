@@ -11,6 +11,7 @@ This architecture specifically mitigates risks associated with operational infra
 
 The system is split into three core smart contract environments, separating the target asset logic, the live market data dependency, and the runtime firewall enforcement logic.
 
+```
 [Privileged Key / Bridge Server]
 │
 ▼ (requestMint)
@@ -23,7 +24,7 @@ The system is split into three core smart contract environments, separating the 
 ┌───────────────┐
 │   HAIToken    │
 └───────────────┘
-
+```
 
 ### 1. The Gateway Firewall (`OGuard.sol`)
 * **Role:** The core execution gatekeeper. It inherits no external dependencies and maintains an isolated internal key registry.
