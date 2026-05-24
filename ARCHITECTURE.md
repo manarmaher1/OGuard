@@ -55,4 +55,67 @@ The key's activity lifecycle is evaluated.
 ### Step 3: Dynamic Economic Ceiling Evaluation
 1. **Epoch Resolution:** The system normalizes time into fixed Unix calendar days (`block.timestamp / 1 days`) to mitigate continuous rolling window tracking gas overhead.
 2. **Liquidity Query:** The firewall calls `getReserves()` on the paired automated market maker (AMM) pool, programmatically mapping the correct reserve slot matching the asset.
-3. **Ceiling Computation:** The dynamic volume ceiling is calculated based on configured Basis Points (BPS) against live poo
+3. **Ceiling Computation:** The dynamic volume ceiling is calculated based on configured Basis Points (BPS) against live pool depth:
+
+   Dynamic Ceiling = (Current Pool Liquidity × maxPoolImpactBps) / BPS_DENOMINATOR
+
+   Real Hacken numbers:
+   (20,000,000 × 500) / 10000 = 1,000,000 HAI per epoch day
+
+4. **Invariant Enforcement:** The cumulative volume already minted 
+in the current epoch day plus the incoming transaction `amount` is 
+checked against the computed ceiling.
+   * If `Global Minted Volume + Amount > Dynamic Ceiling`, execution 
+   reverts with `DynamicLiquidityCeilingBreached()`.
+
+### Step 4: Downstream Interaction
+If all sequential validation checks pass, the counter is incremented, 
+and the firewall triggers the low-level execution call: 
+`token.mint(to, amount)`.
+
+---
+
+## Operational Security Considerations & Vulnerability Surface
+
+While `OGuard` introduces native defensive resilience against 
+compromised keys, a production-grade deployment must account for 
+the following vector trade-offs identified during architectural 
+evaluation:
+
+### 1. Spot Liquidity Manipulation (Flash Loan Risk)
+* **Threat:** Because the baseline implementation calculates the 
+dynamic ceiling using raw spot pool reserves 
+(`IMockDexPool.getReserves()`), the firewall's safety boundaries 
+are vulnerable to intra-block manipulation. An attacker can execute 
+a flash loan to temporarily inflate pool depth, artificially scaling 
+up the dynamic ceiling to push a massive mint payload through in a 
+single transaction block.
+* **Production Mitigation:** Replace direct spot AMM queries with a 
+Time-Weighted Average Liquidity (TWAL) oracle or integrate a 
+decentralized price feed (e.g., Chainlink) to smooth out flash 
+variations. This is a known, solved engineering problem — spot price 
+is used here to demonstrate the core mechanism clearly.
+
+### 2. Boundary Block Minting (The Calendar Epoch Boundary)
+* **Threat:** Utilizing fixed daily calendar epochs 
+(`block.timestamp / 1 days`) reduces timestamp drift compared to a 
+rolling window approach, but preserves a classic boundary condition: 
+an adversary holding a compromised key can attempt to execute a 
+maximum ceiling mint at hour `23:59` of the current epoch, wait for 
+the transaction block that crosses the midnight UTC threshold, and 
+immediately request another maximum mint at hour `00:01` inside the 
+brand new epoch mapping.
+* **Production Mitigation:** While this is strictly capped at a hard 
+2x maximum pool impact within a short timeframe, true continuous 
+smoothing would require shifting from static calendar epochs to a 
+streaming linear decay accumulator or a continuous sliding window 
+array.
+
+### 3. EVM Storage & Gas Optimization
+* **Optimization:** Core authorization parameters are stored inside 
+an individual packed struct (`KeyStatus`), keeping storage reads 
+constrained to a cheap `SLOAD` execution pattern. Human-readable 
+diagnostic data (`infrastructureTag`) is decoupled entirely from 
+the validation pipeline and held in an isolated metadata mapping 
+(`keyMetadata`) to ensure operational monitoring doesn't incur 
+runtime gas penalties.
