@@ -3,7 +3,8 @@ pragma solidity ^0.8.20;
 
 /**
  * @title MockDexPool
- * @notice Simulates a Uniswap V2 style liquidity pool for testing.
+ * @notice Simulates a DEX liquidity pool for testing using the
+ *         Uniswap V2 interface standard,
  *         Reserves are set to match real Hacken $HAI pool depth
  *         at time of the June 2025 exploit (~20M HAI tokens).
  */
