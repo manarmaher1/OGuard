@@ -16,7 +16,7 @@ The system is split into three core smart contract environments, separating the 
 │
 ▼ (requestMint)
 ┌───────────────┐
-│    OGuard     │ ◄───Reads Reserves─── [Uniswap V2 / Mock Pool]
+│    OGuard     │ ◄───Reads Reserves─── [Dex pool / Mock Dex Pool]
 │   (Firewall)  │
 └───────┬───────┘
 │ (if checks pass, internal mint)
