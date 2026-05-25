@@ -3,7 +3,7 @@
 ## Overview
 `OGuard` is an on-chain execution firewall designed as a runtime security layer for privileged token actions. Instead of relying purely on passive off-chain monitoring or simple static role-based access control (RBAC), `OGuard` acts as an inline gateway that evaluates transaction payloads against real-time protocol invariants before allowing state updates to finalize.
 
-This architecture specifically mitigates risks associated with operational infrastructure failures—such as the June 2025 Hacken $HAI bridge key compromise—where an adversary gains control of a valid cryptographic administrative key but attempts an economically catastrophic action.
+This architecture specifically mitigates risks associated with operational infrastructure failures such as the June 2025 Hacken $HAI bridge key compromise, where an adversary gains control of a valid cryptographic administrative key and attempts an economically catastrophic action.
 
 ---
 
