@@ -55,7 +55,7 @@ The key's activity lifecycle is evaluated.
 * **Epoch Resolution:** The system normalizes time into fixed Unix calendar days (`block.timestamp / 1 days`) to mitigate continuous rolling window tracking gas overhead.
 * **Liquidity Query:** The firewall calls `getReserves()` on the paired automated market maker (AMM) pool, programmatically mapping the correct reserve slot matching the asset.
 * **Ceiling Computation:** The dynamic volume ceiling is calculated based on configured Basis Points (BPS) against live pool depth:
-  ``` 
+``` 
 Dynamic Ceiling = (Pool Liquidity × maxPoolImpactBps) / BPS_DENOMINATOR
 
 Real Hacken numbers:
