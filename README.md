@@ -3,15 +3,10 @@
 ** OGuard is a deterministic on-chain execution firewall that prevents privileged key compromise exploits by enforcing dynamic behavioral constraints at the transaction level before any damage can occur.
 
 
-[ Exploit: Hacken $HAI Bridge Key Compromise, June / 2025. ] 
 
 
 ## The Problem
 
-The Hacken hack had no code bug. The contract was written correctly 
-and would have passed every audit and the vulnerability was operational 
-, a forgotten private key on a decommissioned server with unrestricted 
-minting power and nothing to stop it.
 
 Pre-deployment tools can't catch operational infrastructure failures. Traditional monitoring tools can only alert you after the state transition has already occurred. OGuard enforces economic invariants inline, stopping the exploit mid-execution.
 
@@ -27,14 +22,6 @@ Every mint request passes three sequential checks:
 
 All three must pass. Any failure reverts the transaction atomically.
 Zero tokens minted. Zero damage.
-
----
-
-## How It Prevents the Hacken Hack
-Pool depth at time of hack:  ~20,000,000 HAI (Estimated from Onchain data)
-OGuard ceiling at 5%:          1,000,000 HAI per 24 hours
-Attacker requested:          900,000,000 HAI
-900,000,000 > 1,000,000 → REVERT → $0 stolen
 
 ---
 
